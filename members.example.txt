@@ -1,0 +1,4 @@
+# Format: userid,discordid,displayname
+# Nonaktifkan sementara baris dengan menambahkan # di awal baris.
+8480368946,719268229188550747,NamaDisplay
+8634708756,596270099426574337,NamaDisplayLain

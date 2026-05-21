@@ -1,0 +1,29 @@
+{
+  "name": "slhelper",
+  "version": "1.0.0",
+  "description": "SL Helper Discord bot",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "deploy": "node scripts/deploy-commands.js",
+    "clear:global": "node scripts/clear-global-commands.js",
+    "clear:guild": "node scripts/clear-guild-commands.js",
+    "announcements:restore": "node scripts/restore-announcements.js",
+    "permissions:apply": "node scripts/apply-permissions.js",
+    "roles:check": "node scripts/check-server-roles.js",
+    "roles:recommend": "node scripts/recommend-role-permissions.js",
+    "test:roblox": "node test-roblox.js",
+    "check:dup-userid": "node scripts/check-duplicate-userids.js",
+    "dm:update": "node scripts/dm-member-update.js",
+    "dm:update:all": "node scripts/dm-member-update.js --all",
+    "dm:update:dry": "node scripts/dm-member-update.js --all --dry-run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.3.1"
+  }
+}
