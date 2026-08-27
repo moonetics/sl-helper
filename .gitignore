@@ -9,3 +9,4 @@ dm-failed.txt
 member-update-message.md
 *.log
 npm-debug.log*
+transcripts/

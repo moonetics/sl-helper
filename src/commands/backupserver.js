@@ -9,7 +9,7 @@ const { backupGuild } = require("../services/backupService");
 const activeBackups = new Set();
 
 const data = new SlashCommandBuilder()
-  .setName("pjpjserver")
+  .setName("backupserver")
   .setDescription("Backup semua text channel dan voice open chat ke HTML lokal")
   .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
@@ -50,7 +50,7 @@ async function execute(interaction) {
         "Perbaikan yang diperlukan:",
         "1. Aktifkan Message Content Intent di Discord Developer Portal.",
         "2. Set `ENABLE_MESSAGE_CONTENT_INTENT=true` di file `.env`.",
-        "3. Restart bot, lalu jalankan `/pjpjserver` ulang.",
+        "3. Restart bot, lalu jalankan `/backupserver` ulang.",
         "",
         "Backup lama yang sudah berisi `No readable message content` tidak bisa diperbaiki otomatis. Buat backup baru setelah intent aktif.",
       ].join("\n"),

@@ -1,24 +1,30 @@
-# sl-helper
+# Sorevi Labs Helper
 
-SL Helper adalah bot Discord berbasis Node.js dan discord.js untuk membantu operasional server Squad Limpul. Bot ini menyediakan slash command untuk setup struktur server, sinkronisasi roster, backup channel, moderasi dasar, dan pengiriman DM update member.
+Bot Discord berbasis Node.js dan discord.js (v14) untuk operasional studio game **Sorevi Labs** (fokus Roblox Game Development), mencakup sistem ticketing (komplain, bug report, komisi jasa dev, partnership), manajemen struktur server, showcase portofolio, dan integrasi API Roblox.
 
-## Fitur
+## Fitur Utama
 
-- Load slash command dan event handler otomatis dari folder `src/commands` dan `src/events`.
-- Deploy command ke guild tertentu atau global lewat Discord REST API.
-- Setup ulang struktur role dan channel SL lewat `/slsetupchannels`.
-- Publish verified roster dari `members.txt` lewat `/verifiedsl`.
-- Sinkron role verified roster berdasarkan data member aktif.
-- Backup text channel ke HTML lokal lewat `/pjpjserver`.
-- Moderasi utilitas seperti `/clearchat`, `/slkick`, dan `/sldeletechannels`.
-- Script operasional untuk cek role, cek duplikat user ID, restore announcement, dan DM update member.
+- **Sistem Ticketing Multi-Kategori:**
+  - Panel tiket interaktif dengan tombol & popup modal (`Pesan Jasa / Komisi`, `Laporan Bug & Keluhan`, `Partnership`, `Bantuan Umum`).
+  - Pembuatan saluran privat otomatis dengan permission least-privilege untuk user dan tim staff.
+  - Tombol operasional di dalam tiket (`Claim`, `Tutup Tiket`, `Export Transcript`).
+  - Auto-transcript yang dikirimkan ke channel log staff (`#ticket-logs`) dan DM pembuat tiket saat tiket ditutup.
+- **Setup Server Sorevi Labs Otomatis:**
+  - Slash command `/sorevisetup` dan script CLI `npm run sorevi:setup` untuk membangun ulang struktur role developer, kategori, channel informasi, dan memasang panel tiket.
+- **Integrasi Roblox API:**
+  - `/roblox group` untuk melihat statistik & rank group Roblox.
+  - `/roblox game` untuk memantau pemain aktif, total visits, likes/dislikes ratio game Roblox secara live.
+  - `/roblox user` untuk melihat profil dan avatar player/developer.
+- **Utilitas Moderasi & Server:**
+  - `/clearchat` untuk pembersihan pesan massal.
+  - `/pjpjserver` untuk backup isi seluruh channel teks ke file HTML lokal.
+  - `/ticket` untuk manajemen panel, penambahan/pengurangan anggota tiket, dan ekspor transkrip.
 
 ## Persyaratan
 
 - Node.js 18 atau lebih baru.
 - Bot Discord dengan token dari Discord Developer Portal.
-- Permission bot yang sesuai dengan command yang dipakai, seperti `Manage Channels`, `Manage Roles`, `Manage Messages`, `Kick Members`, dan `Administrator` untuk command tertentu.
-- Message Content Intent hanya dibutuhkan untuk fitur backup isi pesan.
+- Bot Permissions: `Manage Channels`, `Manage Roles`, `Manage Messages`, `Attach Files`, `Embed Links`, `View Channel`.
 
 ## Instalasi
 
@@ -26,91 +32,53 @@ SL Helper adalah bot Discord berbasis Node.js dan discord.js untuk membantu oper
 npm install
 ```
 
-Salin file environment contoh:
+Salin file environment:
 
 ```bash
 copy .env.example .env
 ```
 
-Isi `.env`:
+Isi konfigurasi `.env`:
 
 ```env
-DISCORD_TOKEN=isi_token_bot_kamu_di_sini
-CLIENT_ID=isi_application_id_discord_bot
-GUILD_ID=opsional_isi_id_server_discord_untuk_register_cepat
-ENABLE_MESSAGE_CONTENT_INTENT=false
+DISCORD_TOKEN=isi_token_bot_kamu
+CLIENT_ID=isi_client_id_bot
+GUILD_ID=1501690878530424973
+ENABLE_MESSAGE_CONTENT_INTENT=true
 ```
 
-Catatan:
+## Menjalankan Bot
 
-- `GUILD_ID` membuat command cepat muncul di satu server untuk development.
-- Kosongkan `GUILD_ID` jika ingin deploy command global.
-- Set `ENABLE_MESSAGE_CONTENT_INTENT=true` hanya setelah intent tersebut aktif di Discord Developer Portal.
-
-## Data lokal
-
-File data produksi tidak ikut di-commit karena bisa berisi Discord ID, Roblox ID, kode assessment, link form, atau log DM. Buat file lokal dari contoh berikut saat dibutuhkan:
-
-```bash
-copy members.example.txt members.txt
-copy dm.example.txt dm.txt
-copy member-update-message.example.md member-update-message.md
-```
-
-Format `members.txt`:
-
-```txt
-# userid,discordid,displayname
-8480368946,719268229188550747,NamaDisplay
-```
-
-Format `dm.txt` sama, tetapi kolom ketiga biasanya dipakai untuk kode assessment:
-
-```txt
-# userid,discordid,kode
-8480368946,719268229188550747,SLFA-XXXX-XXXX
-```
-
-## Menjalankan bot
-
-Deploy slash command:
+Deploy slash commands ke server:
 
 ```bash
 npm run deploy
 ```
 
-Start bot:
+Jalankan bot:
 
 ```bash
 npm start
 ```
 
-## Script npm
+Jalankan setup struktur server Sorevi Labs via CLI:
 
-- `npm start` menjalankan bot.
-- `npm run deploy` deploy semua slash command.
-- `npm run clear:guild` hapus command guild.
-- `npm run clear:global` hapus command global.
-- `npm run announcements:restore` restore announcement.
-- `npm run permissions:apply` apply permission channel/role.
-- `npm run roles:check` cek role server.
-- `npm run roles:recommend` rekomendasi permission role.
-- `npm run check:dup-userid` cek duplikat Roblox user ID.
-- `npm run dm:update:dry` preview DM update tanpa mengirim.
-- `npm run dm:update` kirim DM ke target default/manual.
-- `npm run dm:update:all` kirim DM ke semua target di `dm.txt`.
-- `npm run test:roblox` test integrasi Roblox API.
+```bash
+npm run sorevi:setup
+```
 
-## Command Discord
+## Daftar Slash Command
 
-- `/verifiedsl` mengirim roster verified SL dan sinkron role verified roster.
-- `/slsetupchannels` reset dan buat ulang struktur role/channel SL.
-- `/sldeletechannels` menghapus semua channel yang bisa dihapus bot lalu membuat channel random.
-- `/slkick user` kick satu member.
-- `/slkick all` mass kick semua member yang bisa dikick bot.
-- `/clearchat` hapus pesan dalam jumlah tertentu.
-- `/pjpjserver` backup channel server ke folder lokal `backups/`.
-
-## Peringatan
-
-Beberapa command bersifat destruktif, terutama `/slsetupchannels`, `/sldeletechannels`, dan `/slkick all`. Pastikan permission bot, role hierarchy, dan opsi `confirm:true` sudah benar sebelum menjalankannya di server utama.
+| Command | Fungsi |
+| :--- | :--- |
+| `/sorevisetup` | Setup ulang seluruh role, kategori, channel, dan panel tiket Sorevi Labs |
+| `/ticket panel` | Mengirim panel tiket interaktif ke channel saat ini |
+| `/ticket close` | Menutup channel tiket aktif dan membuat transkrip log |
+| `/ticket add` | Menambahkan user ke dalam channel tiket aktif |
+| `/ticket remove` | Mengeluarkan user dari channel tiket aktif |
+| `/ticket transcript` | Mengekspor riwayat chat tiket ke file `.txt` |
+| `/roblox group` | Cek detail dan statistik Roblox Group |
+| `/roblox game` | Cek live player, visits, dan rating game Roblox |
+| `/roblox user` | Cek profil dan avatar user Roblox |
+| `/clearchat` | Hapus sejumlah pesan pada channel |
+| `/pjpjserver` | Backup riwayat chat text channel ke format HTML |
