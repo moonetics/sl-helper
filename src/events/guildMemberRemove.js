@@ -6,7 +6,7 @@ module.exports = {
   async execute(member) {
     const guild = member.guild;
 
-    // Kirim Farewell Embed ke channel privat # 🚪・farewell (Staff Only)
+    // Kirim Farewell Embed ke channel farewell
     try {
       const farewellChannel = guild.channels.cache.find(
         (ch) => ch.name.includes("farewell") && ch.isTextBased()
@@ -18,7 +18,7 @@ module.exports = {
           : "Tidak diketahui";
 
         const farewellEmbed = new EmbedBuilder()
-          .setTitle("🚪 Member Meninggalkan Server")
+          .setTitle("Member Meninggalkan Server")
           .setDescription(
             `Member **${member.user.tag}** (<@${member.id}>) telah keluar dari server.`
           )

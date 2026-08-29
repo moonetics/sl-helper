@@ -8,6 +8,14 @@ if (!config.token) {
   process.exit(1);
 }
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
 const intents = [
   GatewayIntentBits.Guilds,
   GatewayIntentBits.GuildMembers,

@@ -362,10 +362,10 @@ async function execute(interaction) {
   }
 
   await interaction.editReply(
-    "✅ **Setup Server Selesai!**\n" +
+    "**Setup Server Selesai**\n" +
     "- Seluruh Kategori, Channel, dan Hak Akses telah dibangun.\n" +
     (postContent ? "- Konten dari file `channel_content/*.md` telah disinkronisasikan.\n" : "- Channel dibuat dalam kondisi kosong bersih.\n") +
-    "- Panel Tiket interaktif telah terpasang di # 📩・create-ticket."
+    "- Panel Tiket interaktif telah terpasang di #create-ticket."
   );
 }
 

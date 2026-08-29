@@ -6,7 +6,7 @@ module.exports = {
   async execute(member) {
     const guild = member.guild;
 
-    // 1. Auto-assign role "⭐ ｜ Sorevi Community"
+    // 1. Auto-assign role "Sorevi Community"
     try {
       const communityRole = guild.roles.cache.find(
         (r) => r.name.includes("Sorevi Community") || r.name.includes("Community")
@@ -18,7 +18,7 @@ module.exports = {
       console.error(`Gagal auto-assign role community ke ${member.user.tag}:`, err.message);
     }
 
-    // 2. Kirim Welcome Embed ke channel # 👋・welcome
+    // 2. Kirim Welcome Embed ke channel welcome
     try {
       const welcomeChannel = guild.channels.cache.find(
         (ch) => ch.name.includes("welcome") && ch.isTextBased()
@@ -33,13 +33,13 @@ module.exports = {
         );
 
         const welcomeEmbed = new EmbedBuilder()
-          .setTitle(`👋 SELAMAT DATANG DI SOREVI LABS!`)
+          .setTitle("SELAMAT DATANG DI SOREVI LABS")
           .setDescription(
-            `Halo <@${member.id}> (\`${member.user.tag}\`), selamat datang di **SOREVI LABS** — Roblox Development & Commission Hub!\n\n` +
-            `🔹 **Baca Peraturan:** Pastikan membaca ${rulesChannel ? `<#${rulesChannel.id}>` : "peraturan server"} sebelum berinteraksi.\n` +
-            `🔹 **Order Project:** Butuh sistem race, obstacle, map, atau UGC 3D? Buka tiket di ${ticketChannel ? `<#${ticketChannel.id}>` : "#create-ticket"}.\n` +
-            `🔹 **Ngobrol Santai:** Gabung diskusi bersama sesama developer di channel umum!\n\n` +
-            `_Semoga Anda menikmati waktu dan pengalaman berkreasi di sini!_`
+            `Halo <@${member.id}> (\`${member.user.tag}\`), selamat datang di **SOREVI LABS** — Roblox Development & Commission Hub.\n\n` +
+            `• **Peraturan:** Pastikan membaca ${rulesChannel ? `<#${rulesChannel.id}>` : "peraturan server"} sebelum berinteraksi.\n` +
+            `• **Order Project:** Butuh sistem race, obstacle, map, atau model 3D? Buka tiket di ${ticketChannel ? `<#${ticketChannel.id}>` : "#create-ticket"}.\n` +
+            `• **Diskusi:** Gabung diskusi bersama sesama developer di channel umum.\n\n` +
+            `_Semoga Anda menikmati waktu dan pengalaman berkreasi di sini._`
           )
           .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
           .setColor(0x00d2d3)
@@ -50,7 +50,7 @@ module.exports = {
           .setTimestamp();
 
         await welcomeChannel.send({
-          content: `Selamat datang <@${member.id}>! 🎉`,
+          content: `Selamat datang <@${member.id}>.`,
           embeds: [welcomeEmbed],
         });
       }

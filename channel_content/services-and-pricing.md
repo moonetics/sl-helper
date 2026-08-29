@@ -2,7 +2,7 @@
 Wujudkan proyek game Roblox Anda bersama **Sorevi Labs** dengan pengerjaan terstruktur, rapi, dan bergaransi. Berikut daftar harga resmi layanan kami:
 ## Rate Map Roblox
 * **Obstacle:** 25K / CP
-* **Custom Obstacle:** 50K / CP
+* **Custom Obstacle:** 100K
 * **Summit Kit System:** 500K
 * **Pulau Basecamp + CP + Summit:** Menyesuaikan skala & detail map
 * **Map Optimization:** Menyesuaikan kompleksitas & tingkat kesulitan

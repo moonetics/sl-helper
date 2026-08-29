@@ -73,7 +73,7 @@ async function execute(interaction) {
     });
 
     return interaction.editReply({
-      content: `✅ Simulasi Welcome Embed untuk <@${targetUser.id}> berhasil dikirim ke channel welcome.`,
+      content: `Simulasi Welcome Embed untuk <@${targetUser.id}> berhasil dikirim ke channel welcome.`,
     });
   }
 
@@ -89,7 +89,7 @@ async function execute(interaction) {
     });
 
     return interaction.editReply({
-      content: `✅ Simulasi Farewell Embed untuk <@${targetUser.id}> berhasil dikirim ke channel farewell.`,
+      content: `Simulasi Farewell Embed untuk <@${targetUser.id}> berhasil dikirim ke channel farewell.`,
     });
   }
 }

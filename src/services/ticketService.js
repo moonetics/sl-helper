@@ -23,7 +23,6 @@ const TICKET_TYPES = {
   commission: {
     id: "commission",
     label: "Order Project",
-    emoji: "🛠️",
     description: "Order sistem game, map building, model 3D, atau custom project",
     color: 0x3498db,
     prefix: "order",
@@ -31,7 +30,6 @@ const TICKET_TYPES = {
   bug: {
     id: "bug",
     label: "Bantuan Teknis",
-    emoji: "🔧",
     description: "Konsultasi error script, bug teknis, atau penyesuaian sistem",
     color: 0xe74c3c,
     prefix: "support",
@@ -39,7 +37,6 @@ const TICKET_TYPES = {
   partner: {
     id: "partner",
     label: "Partnership & Bisnis",
-    emoji: "🤝",
     description: "Kerjasama antar studio, sponsorship, creator, atau investor",
     color: 0xf1c40f,
     prefix: "partner",
@@ -47,7 +44,6 @@ const TICKET_TYPES = {
   general: {
     id: "general",
     label: "Bantuan Umum / Tanya-tanya",
-    emoji: "❓",
     description: "Pertanyaan seputar server, role, atau konsultasi umum",
     color: 0x2ecc71,
     prefix: "help",
@@ -63,12 +59,12 @@ function buildTicketPanelEmbed() {
     .setTitle("🎫 PUSAT LAYANAN & TICKETING SOREVI LABS")
     .setDescription(
       `Selamat datang di **Helpdesk Resmi Sorevi Labs**!\n\n` +
-      `Silakan pilih kategori tiket yang sesuai dengan kebutuhan Anda melalui tombol di bawah. Sistem kami akan membuatkan saluran komunikasi privat langsung dengan tim developer Sorevi Labs.\n\n` +
+      `Silakan pilih kategori tiket yang sesuai dengan kebutuhan Anda melalui tombol di bawah. Sistem akan membuatkan saluran komunikasi privat langsung dengan tim developer Sorevi Labs.\n\n` +
       `**Kategori Layanan:**\n` +
-      `🛠️ **Order Project:** Pembuatan sistem, map obstacle/race, model 3D, atau custom project.\n` +
-      `🔧 **Bantuan Teknis:** Konsultasi error script, bug teknis, atau penyesuaian sistem.\n` +
-      `🤝 **Partnership & Bisnis:** Penawaran kerjasama dan kolaborasi studio/creator.\n` +
-      `❓ **Bantuan Umum:** Pertanyaan seputar server atau konsultasi umum.\n\n` +
+      `• 🛠️ **Order Project:** Pembuatan sistem, map obstacle/race, model 3D, atau custom project.\n` +
+      `• 🔧 **Bantuan Teknis:** Konsultasi error script, bug teknis, atau penyesuaian sistem.\n` +
+      `• 🤝 **Partnership & Bisnis:** Penawaran kerjasama dan kolaborasi studio/creator.\n` +
+      `• ❓ **Bantuan Umum:** Pertanyaan seputar server atau konsultasi umum.\n\n` +
       `_Harap persiapkan detail pertanyaan atau kebutuhan proyek Anda dengan jelas._`
     )
     .setColor(0x5865f2)
@@ -136,7 +132,7 @@ function buildTicketModal(typeKey) {
   const type = TICKET_TYPES[typeKey] || TICKET_TYPES.general;
   const modal = new ModalBuilder()
     .setCustomId(`modal_ticket_submit_${type.id}`)
-    .setTitle(`${type.emoji} Buat Tiket: ${type.label}`.slice(0, 45));
+    .setTitle(`Buat Tiket: ${type.label}`.slice(0, 45));
 
   const subjectInput = new TextInputBuilder()
     .setCustomId("input_subject")
@@ -199,11 +195,11 @@ function buildManualTicketModal(typeKey, targetUserId) {
 
   const descriptionInput = new TextInputBuilder()
     .setCustomId("input_description")
-    .setLabel("Catatan / Keterangan (Opsional)")
-    .setPlaceholder("Tuliskan catatan tambahan untuk tiket ini...")
+    .setLabel("Detail Keterangan / Scope Tiket")
+    .setPlaceholder("Catatan tiket pengerjaan yang dibuat oleh staff...")
     .setStyle(TextInputStyle.Paragraph)
     .setMaxLength(1000)
-    .setRequired(false);
+    .setRequired(true);
 
   modal.addComponents(
     new ActionRowBuilder().addComponents(subjectInput),
@@ -221,10 +217,10 @@ function buildCloseTicketModal() {
 
   const reasonInput = new TextInputBuilder()
     .setCustomId("input_close_reason")
-    .setLabel("Alasan Penutupan Tiket")
-    .setPlaceholder("Contoh: Pengerjaan selesai / Masalah teratasi / Dibatalkan")
+    .setLabel("Alasan Penutupan Tiket (Opsional)")
+    .setPlaceholder("Contoh: Masalah terselesaikan / Project telah selesai")
     .setStyle(TextInputStyle.Paragraph)
-    .setMaxLength(300)
+    .setMaxLength(500)
     .setRequired(false);
 
   modal.addComponents(new ActionRowBuilder().addComponents(reasonInput));
@@ -234,13 +230,13 @@ function buildCloseTicketModal() {
 function buildTicketControls() {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
-      .setCustomId("ticket_claim")
-      .setLabel("Claim Tiket")
-      .setEmoji("🙋‍♂️")
-      .setStyle(ButtonStyle.Success),
+      .setCustomId("ticket_accept")
+      .setLabel("Accept Project")
+      .setEmoji("🚀")
+      .setStyle(ButtonStyle.Primary),
     new ButtonBuilder()
       .setCustomId("ticket_transcript")
-      .setLabel("Export Transcript")
+      .setLabel("Export Transkrip")
       .setEmoji("📑")
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
@@ -249,6 +245,64 @@ function buildTicketControls() {
       .setEmoji("🔒")
       .setStyle(ButtonStyle.Danger)
   );
+}
+
+function buildAcceptTicketModal(defaultProjectName = "") {
+  const modal = new ModalBuilder()
+    .setCustomId("modal_ticket_accept_submit")
+    .setTitle("Terima Proyek & Mulai Pengerjaan");
+
+  const nameInput = new TextInputBuilder()
+    .setCustomId("input_accept_name")
+    .setLabel("Nama Project")
+    .setPlaceholder("Contoh: Mount DRP / Speed Racing")
+    .setValue(defaultProjectName.slice(0, 100) || "")
+    .setStyle(TextInputStyle.Short)
+    .setMaxLength(100)
+    .setRequired(true);
+
+  const totalInput = new TextInputBuilder()
+    .setCustomId("input_accept_total")
+    .setLabel("Total Biaya Proyek")
+    .setPlaceholder("Contoh: 500k / 500.000 / 1.5jt")
+    .setStyle(TextInputStyle.Short)
+    .setMaxLength(50)
+    .setRequired(true);
+
+  const dpInput = new TextInputBuilder()
+    .setCustomId("input_accept_dp")
+    .setLabel("Nominal DP / Terbayar Saat Ini")
+    .setPlaceholder("Contoh: 250k (Kosongkan jika langsung lunas)")
+    .setStyle(TextInputStyle.Short)
+    .setMaxLength(50)
+    .setRequired(false);
+
+  const estimationInput = new TextInputBuilder()
+    .setCustomId("input_accept_estimation")
+    .setLabel("Estimasi Pengerjaan")
+    .setPlaceholder("Contoh: 5-7 hari kerja")
+    .setValue("5-7 hari kerja")
+    .setStyle(TextInputStyle.Short)
+    .setMaxLength(100)
+    .setRequired(false);
+
+  const notesInput = new TextInputBuilder()
+    .setCustomId("input_accept_notes")
+    .setLabel("Scope & Catatan Detail Pengerjaan")
+    .setPlaceholder("Contoh: 10 CP obstacle, Summit kit + Leaderboard, garansi 7 hari...")
+    .setStyle(TextInputStyle.Paragraph)
+    .setMaxLength(1000)
+    .setRequired(false);
+
+  modal.addComponents(
+    new ActionRowBuilder().addComponents(nameInput),
+    new ActionRowBuilder().addComponents(totalInput),
+    new ActionRowBuilder().addComponents(dpInput),
+    new ActionRowBuilder().addComponents(estimationInput),
+    new ActionRowBuilder().addComponents(notesInput)
+  );
+
+  return modal;
 }
 
 async function findStaffRoles(guild) {
@@ -260,6 +314,7 @@ async function findStaffRoles(guild) {
     "builder",
     "3d modeler",
     "ui/ux",
+    "qa",
   ];
 
   return guild.roles.cache.filter((role) =>
@@ -268,6 +323,7 @@ async function findStaffRoles(guild) {
 }
 
 async function getOrCreateActiveTicketsCategory(guild) {
+  await guild.channels.fetch().catch(() => {});
   let targetCategory = guild.channels.cache.find(
     (c) => c.type === ChannelType.GuildCategory && c.name.includes("ACTIVE TICKETS")
   );
@@ -278,7 +334,7 @@ async function getOrCreateActiveTicketsCategory(guild) {
 
     const catOverwrites = [
       {
-        id: guild.roles.everyone.id,
+        id: guild.roles.everyone?.id || guild.id,
         deny: [PermissionFlagsBits.ViewChannel],
       },
       {
@@ -304,7 +360,7 @@ async function getOrCreateActiveTicketsCategory(guild) {
     ];
 
     targetCategory = await guild.channels.create({
-      name: "🎫｜✦ ACTIVE TICKETS ✦",
+      name: "🎫 ｜ ACTIVE TICKETS",
       type: ChannelType.GuildCategory,
       permissionOverwrites: catOverwrites,
       reason: "Auto-create Active Tickets category",
@@ -315,6 +371,7 @@ async function getOrCreateActiveTicketsCategory(guild) {
 }
 
 async function getOrCreateClosedTicketsCategory(guild) {
+  await guild.channels.fetch().catch(() => {});
   let targetCategory = guild.channels.cache.find(
     (c) => c.type === ChannelType.GuildCategory && c.name.includes("CLOSED TICKETS")
   );
@@ -325,7 +382,7 @@ async function getOrCreateClosedTicketsCategory(guild) {
 
     const catOverwrites = [
       {
-        id: guild.roles.everyone.id,
+        id: guild.roles.everyone?.id || guild.id,
         deny: [PermissionFlagsBits.ViewChannel],
       },
       {
@@ -349,7 +406,7 @@ async function getOrCreateClosedTicketsCategory(guild) {
     ];
 
     targetCategory = await guild.channels.create({
-      name: "📁｜✦ CLOSED TICKETS ✦",
+      name: "🔒 ｜ CLOSED TICKETS",
       type: ChannelType.GuildCategory,
       permissionOverwrites: catOverwrites,
       reason: "Auto-create Closed Tickets category",
@@ -359,89 +416,73 @@ async function getOrCreateClosedTicketsCategory(guild) {
   return targetCategory;
 }
 
-function isTicketChannel(channel) {
-  if (!channel || !channel.isTextBased() || channel.isVoiceBased()) return false;
-  const isCodeName = /^sl-[a-z0-9]{6,12}$/i.test(channel.name);
-  const isClosedCodeName = /^closed-sl-[a-z0-9]{6,12}$/i.test(channel.name);
-  const isInTicketCategory =
-    channel.parent &&
-    (channel.parent.name.includes("ACTIVE TICKETS") ||
-      channel.parent.name.includes("CLOSED TICKETS") ||
-      channel.parent.name.includes("HELPDESK & TICKETING") ||
-      channel.parent.name.includes("TICKETING"));
-
-  return isCodeName || isClosedCodeName || isInTicketCategory;
-}
-
-/**
- * Mengelompokkan log ke # 📊・bot-logs (maks 10 baris per embed)
- */
-async function logToBotLogs(guild, entry) {
-  try {
-    const logChannel = guild.channels.cache.find(
-      (c) => c.name.includes("bot-logs") && c.isTextBased()
-    );
-    if (!logChannel) return;
-
-    const timeStr = `<t:${Math.floor(Date.now() / 1000)}:T>`;
-    const logLine = `• **[${timeStr}]** \`${entry.action}\` oleh <@${entry.userId}> di <#${entry.channelId}>${entry.details ? ` (${entry.details})` : ""}`;
-
-    const recentMessages = await logChannel.messages.fetch({ limit: 5 });
-    const botMsg = recentMessages.find((m) => m.author.id === guild.client.user.id && m.embeds.length > 0);
-
-    if (botMsg && botMsg.embeds.length > 0) {
-      const currentEmbed = botMsg.embeds[0];
-      const existingLines = currentEmbed.description ? currentEmbed.description.split("\n").filter((l) => l.trim().length > 0) : [];
-
-      if (existingLines.length < 10) {
-        existingLines.push(logLine);
-        const updatedEmbed = EmbedBuilder.from(currentEmbed)
-          .setDescription(existingLines.join("\n\n"))
-          .setTimestamp();
-        await botMsg.edit({ embeds: [updatedEmbed] });
-        return;
-      }
-    }
-
-    // Jika belum ada pesan atau sudah mencapai 10 entri, buat pesan embed baru
-    const newEmbed = new EmbedBuilder()
-      .setTitle("📊 AUDIT & BOT COMMAND LOGS")
-      .setDescription(logLine)
-      .setColor(0x5865f2)
-      .setFooter({ text: "Sorevi Labs • Realtime Audit Log" })
-      .setTimestamp();
-
-    await logChannel.send({ embeds: [newEmbed] });
-  } catch (err) {
-    console.error("Gagal mencatat log ke bot-logs:", err.message);
-  }
-}
-
 async function logToTicketLogs(guild, embed) {
   try {
     const logChannel = guild.channels.cache.find(
-      (c) => c.name.includes("ticket-logs") && c.isTextBased()
+      (c) => c.isTextBased() && c.name.includes("ticket-logs")
     );
     if (logChannel) {
       await logChannel.send({ embeds: [embed] });
     }
-  } catch (err) {
-    console.error("Gagal mengirim log ke ticket-logs:", err.message);
+  } catch (error) {
+    console.error("Gagal mengirim log ke ticket-logs:", error.message);
   }
+}
+
+async function logToBotLogs(guild, { action, userId, channelId, details }) {
+  try {
+    const logChannel = guild.channels.cache.find(
+      (c) => c.isTextBased() && c.name.includes("bot-logs")
+    );
+    if (logChannel) {
+      const logEmbed = new EmbedBuilder()
+        .setTitle("Log Aktivitas Bot")
+        .addFields(
+          { name: "Aksi", value: action || "Unknown", inline: true },
+          { name: "User", value: userId ? `<@${userId}>` : "System", inline: true },
+          { name: "Channel", value: channelId ? `<#${channelId}>` : "N/A", inline: true }
+        )
+        .setColor(0x5865f2)
+        .setTimestamp();
+
+      if (details) {
+        logEmbed.addFields({ name: "Keterangan", value: details, inline: false });
+      }
+
+      await logChannel.send({ embeds: [logEmbed] });
+    }
+  } catch (error) {
+    console.error("Gagal mengirim log ke bot-logs:", error.message);
+  }
+}
+
+function isTicketChannel(channel) {
+  if (!channel || !channel.isTextBased() || channel.isVoiceBased()) return false;
+  const isInTicketCategory =
+    channel.parent &&
+    (channel.parent.name.includes("ACTIVE TICKETS") ||
+      channel.parent.name.includes("ACTIVE WARRANTY") ||
+      channel.parent.name.includes("CLOSED TICKETS") ||
+      channel.parent.name.includes("HELPDESK"));
+  const hasTicketPrefix = /^🎫・sl-|^sl-|^order-|^support-|^partner-|^help-|^closed-sl-|^🔒・sl-/i.test(
+    channel.name
+  );
+
+  return isInTicketCategory || hasTicketPrefix;
 }
 
 async function createTicketChannel(guild, user, typeKey, formData = {}) {
   const type = TICKET_TYPES[typeKey] || TICKET_TYPES.general;
+  const ticketCode = generateTicketCode();
+  const channelName = `🎫・sl-${ticketCode}`;
+
   const staffRoles = await findStaffRoles(guild);
   const botMember = guild.members.me || (await guild.members.fetchMe());
-  const targetCategory = await getOrCreateActiveTicketsCategory(guild);
-
-  const ticketCode = generateTicketCode();
-  const channelName = `sl-${ticketCode}`;
+  const activeCategory = await getOrCreateActiveTicketsCategory(guild);
 
   const permissionOverwrites = [
     {
-      id: guild.roles.everyone.id,
+      id: guild.roles.everyone?.id || guild.id,
       deny: [PermissionFlagsBits.ViewChannel],
     },
     {
@@ -482,14 +523,14 @@ async function createTicketChannel(guild, user, typeKey, formData = {}) {
   const channel = await guild.channels.create({
     name: channelName,
     type: ChannelType.GuildText,
-    parent: targetCategory ? targetCategory.id : null,
+    parent: activeCategory ? activeCategory.id : null,
     permissionOverwrites,
     topic: `Tiket ID: ${ticketCode.toUpperCase()} | Pembuat: ${user.tag} (${user.id}) | Kategori: ${type.label}`,
     reason: `Tiket baru dibuka oleh ${user.tag}`,
   });
 
   const embed = new EmbedBuilder()
-    .setTitle(`${type.emoji} TIKET: ${type.label.toUpperCase()} [${ticketCode.toUpperCase()}]`)
+    .setTitle(`TIKET: ${type.label.toUpperCase()} [${ticketCode.toUpperCase()}]`)
     .setDescription(
       `Halo <@${user.id}>, selamat datang di saluran komunikasi tiket Anda!\n\n` +
       `Tim developer kami telah diberitahu dan akan segera merespon kebutuhan Anda. Silakan sampaikan pertanyaan atau detail proyek Anda dengan jelas.`
@@ -500,7 +541,7 @@ async function createTicketChannel(guild, user, typeKey, formData = {}) {
       { name: "🔑 Kode Tiket", value: `\`${ticketCode.toUpperCase()}\``, inline: true }
     )
     .setColor(type.color)
-    .setFooter({ text: "Sorevi Labs • Gunakan tombol di bawah untuk mengelola tiket" })
+    .setFooter({ text: "Sorevi Labs • Helpdesk & Ticketing" })
     .setTimestamp();
 
   if (formData.subject) {
@@ -513,7 +554,6 @@ async function createTicketChannel(guild, user, typeKey, formData = {}) {
     embed.addFields({ name: "📝 Catatan / Keterangan", value: formData.description, inline: false });
   }
 
-  // Ping HANYA user pembuat dan role Project Developer
   const projectDevRole = guild.roles.cache.find(
     (r) => r.name.includes("Project Developer") && !r.name.includes("Lead")
   ) || staffRoles.first();
@@ -523,12 +563,10 @@ async function createTicketChannel(guild, user, typeKey, formData = {}) {
   await channel.send({
     content: pingContent.trim(),
     embeds: [embed],
-    components: [buildTicketControls()],
   });
 
-  // Log ke ticket-logs
   const logEmbed = new EmbedBuilder()
-    .setTitle("🎫 Tiket Baru Dibuka")
+    .setTitle("Tiket Baru Dibuka")
     .addFields(
       { name: "Kode Tiket", value: `\`${ticketCode.toUpperCase()}\``, inline: true },
       { name: "Channel", value: `<#${channel.id}>`, inline: true },
@@ -541,30 +579,6 @@ async function createTicketChannel(guild, user, typeKey, formData = {}) {
   await logToTicketLogs(guild, logEmbed);
 
   return channel;
-}
-
-async function claimTicket(interaction) {
-  if (!isTicketChannel(interaction.channel)) {
-    return interaction.reply({
-      content: "Command ini hanya bisa digunakan di dalam channel tiket aktif.",
-      flags: MessageFlags.Ephemeral,
-    });
-  }
-
-  const claimEmbed = new EmbedBuilder()
-    .setDescription(`🙋‍♂️ Tiket ini telah **diklaim** oleh <@${interaction.user.id}> (\`${interaction.user.tag}\`). Tim developer kami akan segera mendampingi kebutuhan Anda.`)
-    .setColor(0x2ecc71)
-    .setTimestamp();
-
-  await interaction.reply({ embeds: [claimEmbed] });
-
-  // Log ke bot-logs
-  await logToBotLogs(interaction.guild, {
-    action: "Claim Tiket",
-    userId: interaction.user.id,
-    channelId: interaction.channel.id,
-    details: "Tiket diklaim",
-  });
 }
 
 async function exportTranscriptMarkdown(channel) {
@@ -599,7 +613,8 @@ async function exportTranscriptMarkdown(channel) {
     mdText += `### [${time}] ${author}\n${content}\n\n`;
   }
 
-  const fileName = `transcript-${channel.name}.md`;
+  const safeName = channel.name.replace(/[^a-zA-Z0-9_-]/g, "_");
+  const fileName = `transcript-${safeName}.md`;
   const filePath = path.join(TRANSCRIPTS_DIR, fileName);
   fs.writeFileSync(filePath, mdText, "utf-8");
 
@@ -618,23 +633,19 @@ async function closeTicket(interaction, reason = "Tidak ada alasan yang diberika
   const guild = interaction.guild;
 
   await interaction.reply({
-    content: "🔒 Tiket sedang ditutup dan diarsipkan ke kategori Closed. Transkrip chat `.md` sedang disimpan...",
+    content: "Tiket sedang ditutup dan diarsipkan ke kategori Closed. Transkrip chat .md sedang disimpan...",
   });
 
   try {
-    // 1. Export Transkrip ke file .md lokal
     const transcriptInfo = await exportTranscriptMarkdown(channel);
-
-    // 2. Dapatkan / Buat Kategori Closed Tickets
     const closedCategory = await getOrCreateClosedTicketsCategory(guild);
 
-    // 3. Cabut hak akses member pembuat tiket (semua member non-staff)
     const staffRoles = await findStaffRoles(guild);
     const botMember = guild.members.me || (await guild.members.fetchMe());
 
     const closedOverwrites = [
       {
-        id: guild.roles.everyone.id,
+        id: guild.roles.everyone?.id || guild.id,
         deny: [PermissionFlagsBits.ViewChannel],
       },
       {
@@ -657,16 +668,16 @@ async function closeTicket(interaction, reason = "Tidak ada alasan yang diberika
       })),
     ];
 
-    // Pindahkan channel ke kategori Closed dan set izin baru
+    const cleanName = channel.name.replace(/^[^\w-]+・?/, "");
     await channel.edit({
+      name: `🔒・${cleanName}`,
       parent: closedCategory ? closedCategory.id : null,
       permissionOverwrites: closedOverwrites,
       reason: `Tiket ditutup oleh ${interaction.user.tag}: ${reason}`,
     });
 
-    // 4. Kirim embed konfirmasi penutupan di channel tiket
     const closeEmbed = new EmbedBuilder()
-      .setTitle("📁 Tiket Telah Ditutup & Diarsipkan")
+      .setTitle("Tiket Telah Ditutup & Diarsipkan")
       .setDescription(
         `Tiket ini telah resmi ditutup oleh <@${interaction.user.id}>.\n` +
         `Hak akses member telah dicabut dan riwayat percakapan telah disimpan di server lokal.`
@@ -680,9 +691,8 @@ async function closeTicket(interaction, reason = "Tidak ada alasan yang diberika
 
     await channel.send({ embeds: [closeEmbed] });
 
-    // 5. Kirim log penutupan ke # 📊・ticket-logs
     const logEmbed = new EmbedBuilder()
-      .setTitle("🔒 Tiket Ditutup & Diarsipkan")
+      .setTitle("Tiket Ditutup & Diarsipkan")
       .addFields(
         { name: "Nama Channel", value: `<#${channel.id}> (\`#${channel.name}\`)`, inline: true },
         { name: "Ditutup Oleh", value: `${interaction.user.tag} (<@${interaction.user.id}>)`, inline: true },
@@ -694,19 +704,271 @@ async function closeTicket(interaction, reason = "Tidak ada alasan yang diberika
 
     await logToTicketLogs(guild, logEmbed);
 
-    // 6. Log aksi ke # 📊・bot-logs
     await logToBotLogs(guild, {
       action: "Tutup Tiket",
       userId: interaction.user.id,
       channelId: channel.id,
       details: `Alasan: ${reason}`,
     });
+
+    try {
+      const warrantyService = require("./warrantyService");
+      warrantyService.handleManualTicketClose(channel.id);
+    } catch {}
   } catch (err) {
     console.error("Gagal menutup tiket:", err);
     await channel.send({
-      content: `⚠️ Terjadi error saat mengarsipkan tiket: ${err.message}`,
+      content: `Terjadi error saat mengarsipkan tiket: ${err.message}`,
     });
   }
+}
+
+async function acceptTicketAsProject(interaction, { projectName, estimation, totalPrice, dpPaid, picUserId, notes }) {
+  const channel = interaction.channel;
+  const guild = interaction.guild;
+
+  if (!isTicketChannel(channel)) {
+    return interaction.reply({
+      content: "Aksi ini hanya bisa dijalankan di dalam channel tiket aktif.",
+      flags: MessageFlags.Ephemeral,
+    });
+  }
+
+  const { calculatePaymentDetails } = require("../utils/currencyUtils");
+  const paymentInfo = calculatePaymentDetails(totalPrice, dpPaid);
+  const projectService = require("./projectService");
+
+  // Deteksi pembuat tiket dari channel topic
+  let clientUser = null;
+  if (channel.topic) {
+    const match = channel.topic.match(/Pembuat:\s*.*?\((\d{16,20})\)/i);
+    if (match) {
+      clientUser = await guild.client.users.fetch(match[1]).catch(() => null);
+    }
+  }
+
+  // Jika tidak ditemukan dari topic, cari dari permission overwrites non-bot
+  if (!clientUser) {
+    const nonStaffOverwrite = channel.permissionOverwrites.cache.find(
+      (po) => po.type === 1 && po.id !== guild.client.user.id
+    );
+    if (nonStaffOverwrite) {
+      clientUser = await guild.client.users.fetch(nonStaffOverwrite.id).catch(() => null);
+    }
+  }
+
+  // Tentukan PIC
+  let picUser = interaction.user;
+  if (picUserId) {
+    const cleanId = picUserId.replace(/[<@!>]/g, "").trim();
+    if (cleanId) {
+      const fetchedPic = await guild.client.users.fetch(cleanId).catch(() => null);
+      if (fetchedPic) picUser = fetchedPic;
+    }
+  }
+
+  // Dapatkan Kategori ACTIVE PROJECTS
+  const activeProjectsCategory = await projectService.getOrCreateActiveProjectsCategory(guild);
+
+  // 1. Pindahkan dan rename channel yang sama ke 🚀・prj-<slug>
+  const slug = projectName
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .slice(0, 30) || "custom-project";
+  const newChannelName = `🚀・prj-${slug}`;
+
+  const channelTopic = `Project: ${projectName} | Client: ${clientUser ? `${clientUser.tag} (${clientUser.id})` : "N/A"} | PIC: ${picUser ? `${picUser.tag} (${picUser.id})` : "N/A"} | Estimasi: ${estimation || "5-7 hari kerja"} | Biaya: ${paymentInfo.totalFormatted}`;
+
+  await channel.edit({
+    name: newChannelName,
+    parent: activeProjectsCategory ? activeProjectsCategory.id : null,
+    topic: channelTopic.slice(0, 1024),
+    reason: `Tiket di-accept menjadi project aktif oleh ${interaction.user.tag}`,
+  });
+
+  // 2. Beri role Verified Client ke klien
+  if (clientUser) {
+    await projectService.assignVerifiedClientRole(guild, clientUser.id);
+  }
+
+  // 3. Kirim embed pengerjaan di dalam channel (tanpa bocoran /controls)
+  const projectAcceptEmbed = new EmbedBuilder()
+    .setTitle(`PROJECT WORKSPACE: ${projectName.toUpperCase()}`)
+    .setDescription(
+      `Pesanan proyek **${projectName}** telah resmi masuk ke slot pengerjaan Sorevi Labs.\n` +
+      `Channel ini telah dialihkan ke kategori **ACTIVE PROJECTS**. Klien dan tim developer dapat berkolaborasi di sini.\n\n` +
+      `📌 **Status Pengerjaan:** Dalam Pengerjaan (In Progress)\n` +
+      `⏱️ **Estimasi Pengerjaan:** \`${estimation || "5-7 hari kerja"}\`\n` +
+      `💻 **Developer PIC:** <@${picUser.id}> (\`${picUser.tag}\`)\n` +
+      `💰 **Total Biaya:** \`${paymentInfo.totalFormatted}\`\n` +
+      `💵 **DP / Terbayar:** \`${paymentInfo.dpFormatted}\`\n` +
+      `📊 **Sisa Tagihan:** \`${paymentInfo.sisaFormatted}\`\n` +
+      `💳 **Status Tagihan:** ${paymentInfo.statusText}\n` +
+      `📝 **Catatan / Scope:** ${notes || "Sesuai diskusi tiket"}\n\n` +
+      `_Tim developer kami akan terus membagikan pembaruan progres di saluran ini._`
+    )
+    .setColor(paymentInfo.isLunas ? 0x2ecc71 : 0x3498db)
+    .setFooter({ text: "Sorevi Labs • Active Project Workspace" })
+    .setTimestamp();
+
+  await channel.send({
+    content: clientUser ? `<@${clientUser.id}>` : undefined,
+    embeds: [projectAcceptEmbed],
+  });
+
+  // 4. Log ke ticket-logs & bot-logs
+  const logEmbed = new EmbedBuilder()
+    .setTitle("Project Dimulai")
+    .addFields(
+      { name: "Nama Project", value: projectName, inline: true },
+      { name: "Channel", value: `<#${channel.id}> (\`#${newChannelName}\`)`, inline: true },
+      { name: "Client", value: clientUser ? `<@${clientUser.id}>` : "N/A", inline: true },
+      { name: "PIC", value: `<@${picUser.id}>`, inline: true },
+      { name: "Total Biaya", value: paymentInfo.totalFormatted, inline: true },
+      { name: "DP", value: paymentInfo.dpFormatted, inline: true }
+    )
+    .setColor(0x3498db)
+    .setTimestamp();
+
+  await logToTicketLogs(guild, logEmbed);
+
+  await logToBotLogs(guild, {
+    action: "Accept Project",
+    userId: interaction.user.id,
+    channelId: channel.id,
+    details: `Project "${projectName}" dipindahkan ke Active Projects`,
+  });
+
+  if (interaction.deferred || interaction.replied) {
+    await interaction.editReply({
+      content: `Proyek **${projectName}** berhasil diterima. Channel telah dipindahkan ke kategori **ACTIVE PROJECTS** (#${newChannelName}).`,
+    });
+  } else {
+    await interaction.reply({
+      content: `Proyek **${projectName}** berhasil diterima. Channel telah dipindahkan ke kategori **ACTIVE PROJECTS** (#${newChannelName}).`,
+      flags: MessageFlags.Ephemeral,
+    });
+  }
+}
+
+async function handoverTicket(interaction, { projectName, notes, durationDays }) {
+  const channel = interaction.channel;
+  const guild = interaction.guild;
+
+  if (!isTicketChannel(channel)) {
+    return interaction.reply({
+      content: "Aksi ini hanya bisa dijalankan di dalam channel tiket aktif.",
+      flags: MessageFlags.Ephemeral,
+    });
+  }
+
+  let clientUser = null;
+  if (channel.topic) {
+    const match = channel.topic.match(/Pembuat:\s*.*?\((\d{16,20})\)/i);
+    if (match) {
+      clientUser = await guild.client.users.fetch(match[1]).catch(() => null);
+    }
+  }
+  if (!clientUser) {
+    const nonStaffOverwrite = channel.permissionOverwrites.cache.find(
+      (po) => po.type === 1 && po.id !== guild.client.user.id
+    );
+    if (nonStaffOverwrite) {
+      clientUser = await guild.client.users.fetch(nonStaffOverwrite.id).catch(() => null);
+    }
+  }
+
+  const warrantyService = require("./warrantyService");
+  const pName = projectName || (channel.topic?.match(/Topik:\s*([^|]+)/i)?.[1]?.trim()) || channel.name.replace(/^sl-/, "Project ");
+
+  await warrantyService.startWarranty(guild, {
+    ticketChannel: channel,
+    clientUser,
+    picUser: interaction.user,
+    projectName: pName,
+    notes: notes || "Ownership place / project telah diserahterimakan kepada klien.",
+    durationDays: durationDays || 7,
+    actorUser: interaction.user,
+  });
+
+  if (interaction.deferred || interaction.replied) {
+    await interaction.editReply({
+      content: `Masa garansi & full support resmi diaktifkan selama ${durationDays || 7} hari untuk **${pName}**.`,
+    });
+  } else {
+    await interaction.reply({
+      content: `Masa garansi & full support resmi diaktifkan selama ${durationDays || 7} hari untuk **${pName}**.`,
+      flags: MessageFlags.Ephemeral,
+    });
+  }
+}
+
+function buildActiveTicketControlsEmbed(channel) {
+  return new EmbedBuilder()
+    .setTitle("🎫 KONTROL TIKET OPERASIONAL (ADMIN/STAFF)")
+    .setDescription(
+      `Panel manajemen operasional untuk channel tiket <#${channel.id}> (\`#${channel.name}\`).\n\n` +
+      `• **🚀 Accept Project:** Terima pesanan & pindahkan channel ke Active Projects.\n` +
+      `• **📑 Export Transkrip:** Simpan riwayat percakapan ke file Markdown.\n` +
+      `• **🔒 Tutup Tiket:** Tutup tiket & pindahkan ke Closed Tickets jika non-proyek.`
+    )
+    .setColor(0x3498db)
+    .setFooter({ text: "Sorevi Labs • Ticket Controls (Ephemeral)" });
+}
+
+function buildClosedTicketControls() {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("ticket_transcript")
+      .setLabel("Download Transkrip")
+      .setEmoji("📑")
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
+      .setCustomId("closed_ticket_delete")
+      .setLabel("Hapus Channel Permanen")
+      .setEmoji("🗑️")
+      .setStyle(ButtonStyle.Danger)
+  );
+}
+
+function buildClosedTicketControlsEmbed(channel) {
+  return new EmbedBuilder()
+    .setTitle("🔒 KONTROL ARSIP TIKET (CLOSED)")
+    .setDescription(
+      `Channel ini merupakan tiket yang telah ditutup (<#${channel.id}>).\n\n` +
+      `Gunakan tombol di bawah untuk mengunduh riwayat transkrip atau menghapus channel secara permanen jika sudah selesai.`
+    )
+    .setColor(0x7f8c8d)
+    .setFooter({ text: "Sorevi Labs • Closed Ticket Controls" });
+}
+
+async function deleteClosedTicket(interaction) {
+  const channel = interaction.channel;
+  const isClosed =
+    channel.name.startsWith("closed-") ||
+    (channel.parent && channel.parent.name.includes("CLOSED TICKETS"));
+
+  if (!isClosed) {
+    return interaction.reply({
+      content: "Hanya channel tiket yang sudah ditutup/diarsipkan yang dapat dihapus.",
+      flags: MessageFlags.Ephemeral,
+    });
+  }
+
+  await interaction.reply({
+    content: "Channel tiket ini akan dihapus secara permanen dalam 5 detik...",
+  });
+
+  setTimeout(async () => {
+    try {
+      await channel.delete("Dihapus permanen oleh staff");
+    } catch (err) {
+      console.error("Gagal menghapus closed ticket:", err.message);
+    }
+  }, 5000);
 }
 
 module.exports = {
@@ -718,10 +980,16 @@ module.exports = {
   buildManualTicketModal,
   buildCloseTicketModal,
   buildTicketControls,
+  buildActiveTicketControlsEmbed,
+  buildClosedTicketControls,
+  buildClosedTicketControlsEmbed,
+  buildAcceptTicketModal,
+  acceptTicketAsProject,
+  handoverTicket,
   createTicketChannel,
-  claimTicket,
   exportTranscriptMarkdown,
   closeTicket,
+  deleteClosedTicket,
   isTicketChannel,
   logToBotLogs,
   logToTicketLogs,
